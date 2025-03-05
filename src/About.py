@@ -24,7 +24,7 @@ with st.spinner('Loading page...'):
     # Our Dataset Section
     st.write("### Our Dataset")
     st.write("The dataset we have selected includes data from six different versions of the game released between the years 2017 and 2022. The dataset is quite extensive and includes various attributes about the players including skills, physical attributes, potential ratings, wages, and market values. As a result this dataset will help us make accurate predictions about all the players.") 
-)
+
 
     # Our Goal Section
     st.write("### Our Goal")
