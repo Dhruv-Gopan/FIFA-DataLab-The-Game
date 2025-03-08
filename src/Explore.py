@@ -96,6 +96,23 @@ elif selected == "02: Viz":
         sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", ax=ax)
         st.pyplot(fig)
 
+        # Highest Paid Players per FIFA Edition
+        st.markdown("### 💰 Top 10 Highest-Paid Players")
+
+        # Get the top 10 highest-paid players for the selected FIFA edition
+        top_paid_players = df.nlargest(10, 'Wage(€K)')
+
+        # Create a bar plot
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.barplot(y=top_paid_players['Name'], x=top_paid_players['Wage(€K)'], palette="magma", ax=ax)
+        ax.set_title(f"Top 10 Highest-Paid Players in FIFA {dataset_option}")
+        ax.set_xlabel("Wage (€K)")
+        ax.set_ylabel("Player Name")
+
+        # Display in Streamlit
+        st.pyplot(fig)
+
+
         st.markdown("## 🔥 Distributions of Football Playes")
         st.write("select a category to view Football Players Distibution")
 
