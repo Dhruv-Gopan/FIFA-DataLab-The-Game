@@ -107,7 +107,8 @@ elif selected == "02: Viz":
         bars = sns.barplot(y=top_paid_players['Name'], x=top_paid_players['Wage(€K)'], palette="magma", ax=ax)
 
         # Add labels to each bar
-        ax.bar_label(bars.containers[0], fmt='%.0f', label_type='edge', padding=3, fontsize=10, color='black', weight='bold')
+        for container in bars.containers:
+            ax.bar_label(container, fmt='%.0f', label_type='edge', padding=3, fontsize=10, color='black', weight='bold')
 
         ax.set_title(f"Top 10 Highest-Paid Players in {dataset_option}")
         ax.set_xlabel("Wage (€K)")
