@@ -96,25 +96,31 @@ elif selected == "02: Viz":
         sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", ax=ax)
         st.pyplot(fig)
 
-        # Highest Paid Players per FIFA Edition
-        st.markdown("### 💰 Top 10 Highest-Paid Players")
+        # Highest Valued Players per FIFA Edition
+        st.markdown("### 💸 Top 10 Highest-Valued Players")
 
-        # Get the top 10 highest-paid players for the selected FIFA edition
-        top_paid_players = df.nlargest(10, 'Value(€K)')
+        # Get the top 10 highest-valued players for the selected FIFA edition
+        top_valued_players = df.nlargest(10, 'Value(€K)')
 
         # Create a bar plot
         fig, ax = plt.subplots(figsize=(8, 5))
-        bars = sns.barplot(y=top_paid_players['Name'], x=top_paid_players['Value(€K)'], palette="magma", ax=ax)
+        bars = sns.barplot(
+            y=top_valued_players['Name'],
+            x=top_valued_players['Value(€K)'],
+            palette="plasma",
+            ax=ax
+        )
 
-        # Add labels to each bar
+        # Add value labels to each bar
         for container in bars.containers:
             ax.bar_label(container, fmt='%.0f', label_type='edge', padding=3, fontsize=10, color='black', weight='bold')
 
-        ax.set_title(f"Top 10 Highest-Paid Players in {dataset_option}")
-        ax.set_xlabel("Value(€K)")
+        
+        ax.set_title(f"Top 10 Highest-Valued Players in FIFA {dataset_option}")
+        ax.set_xlabel("Value (€K)")
         ax.set_ylabel("Player Name")
 
-        # Display in Streamlit
+        # Display the plot 
         st.pyplot(fig)
 
 
