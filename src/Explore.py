@@ -100,13 +100,13 @@ elif selected == "02: Viz":
         st.markdown("### 💸 Top 10 Highest-Valued Players")
 
         # Get the top 10 highest-valued players for the selected FIFA edition
-        top_valued_players = df.nlargest(10, 'Value(€K)')
+        top_valued_players = df.nlargest(10, 'Value')
 
         # Create a bar plot
         fig, ax = plt.subplots(figsize=(8, 5))
         bars = sns.barplot(
             y=top_valued_players['Name'],
-            x=top_valued_players['Value(€K)'],
+            x=top_valued_players['Value'],
             palette="plasma",
             ax=ax
         )
@@ -117,7 +117,7 @@ elif selected == "02: Viz":
 
         
         ax.set_title(f"Top 10 Highest-Valued Players in FIFA {dataset_option}")
-        ax.set_xlabel("Value (€K)")
+        ax.set_xlabel("Value ()")
         ax.set_ylabel("Player Name")
 
         # Display the plot 
