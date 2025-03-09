@@ -69,6 +69,9 @@ elif selected == "02: Viz":
     dataset_option = st.selectbox("FIFA Version: ",list(datasets.keys()));
     df = pd.read_csv(datasets[dataset_option])
 
+    st.write("🔍 Columns in this dataset:", df.columns.tolist())   
+    df = pd.read_csv(datasets[dataset_option])
+    st.write("🔍 Columns in this dataset:", df.columns.tolist())
 
     # Select only numeric columns
     Numeric_df = df.select_dtypes(include=['number'])
@@ -117,7 +120,7 @@ elif selected == "02: Viz":
 
         
         ax.set_title(f"Top 10 Highest-Valued Players in FIFA {dataset_option}")
-        ax.set_xlabel("Value ()")
+        ax.set_xlabel("Value (€K)")
         ax.set_ylabel("Player Name")
 
         # Display the plot 
