@@ -97,7 +97,7 @@ elif selected == "02: Viz":
         st.pyplot(fig)
 
         # Highest Valued Players per FIFA Edition
-        df['Value(€M)'] = df['Value(€M)'].replace('[€M]', '', regex=True).astype(float)
+        
         st.markdown("### 💸 Top 10 Highest-Valued Players")
 
         # Get the top 10 highest-valued players for the selected FIFA edition
