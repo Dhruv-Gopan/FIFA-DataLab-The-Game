@@ -44,7 +44,7 @@ if selected == "01: Data":
         "GKDiving", "GKHandling", "GKKicking", "GKPositioning", "GKReflexes"  
     ]
     category = st.selectbox("Top Ten in:", categories)
-## To be Modified
+    ## To be Modified
     if category in df.columns:
     # Base columns to display
         base_columns = ["Name","Nationality","Club", "Age", "Overall", "Value(€M)", "Wage(€K)"]
@@ -69,6 +69,19 @@ elif selected == "02: Viz":
     dataset_option = st.selectbox("FIFA Version: ",list(datasets.keys()));
     df = pd.read_csv(datasets[dataset_option])
 
+    def convert_value(val):
+        if isinstance(val, str):
+            val = val.replace('€', '').strip()
+            if 'M' in val:
+                return float(val.replace('M', ''))
+            elif 'K' in val:
+                return float(val.replace('K', '')) / 1000
+        try:
+            return float(val)
+        except:
+            return None
+
+    df['Value(€M)'] = df['Value(€M)'].apply(convert_value)
 
     # Select only numeric columns
     Numeric_df = df.select_dtypes(include=['number'])
@@ -107,7 +120,7 @@ elif selected == "02: Viz":
         fig, ax = plt.subplots(figsize=(8, 5))
         bars = sns.barplot(
             y=top_valued_players['Name'],
-            x=top_valued_players['Value'],
+            x=top_valued_players['Value(€M)'],
             palette="plasma",
             ax=ax
         )
