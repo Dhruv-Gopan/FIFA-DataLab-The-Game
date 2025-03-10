@@ -83,6 +83,29 @@ elif selected == "02: Viz":
 
     df['Value(€M)'] = df['Value(€M)'].apply(convert_value)
 
+    # Combine all FIFA datasets into one DataFrame
+    combined_df = pd.DataFrame()
+
+    for year, path in datasets.items():
+        temp_df = pd.read_csv(path)
+        temp_df["FIFA Edition"] = year  # add column to track edition
+        combined_df = pd.concat([combined_df, temp_df], ignore_index=True)
+
+    # Convert Value column
+    def convert_value(val):
+        if isinstance(val, str):
+            val = val.replace('€', '').strip()
+            if 'M' in val:
+                return float(val.replace('M', ''))
+            elif 'K' in val:
+                return float(val.replace('K', '')) / 1000
+        try:
+            return float(val)
+        except:
+            return None
+
+    combined_df["Value(€M)"] = combined_df["Value(€M)"].apply(convert_value)
+
     # Select only numeric columns
     Numeric_df = df.select_dtypes(include=['number'])
 
@@ -137,14 +160,45 @@ elif selected == "02: Viz":
         # Display the plot 
         st.pyplot(fig)
 
+        # 🎯 Track a Specific Player Across FIFA Editions
+        st.markdown("## 📈 Player Progression Across Editions")
+
+        # Select player name
+        player_names = combined_df["Name"].dropna().unique()
+        selected_player = st.selectbox("Select a player to track:", sorted(player_names))
+
+        # Filter player data across editions
+        player_data = combined_df[combined_df["Name"] == selected_player]
+
+        # Sort by edition
+        player_data = player_data.sort_values(by="FIFA Edition")
+
+        # Plot value and overall rating progression
+        fig, ax1 = plt.subplots(figsize=(10, 5))
+
+        ax1.plot(player_data["FIFA Edition"], player_data["Value(€M)"], marker='o', label="Value (€M)", color='green')
+        ax1.set_ylabel("Value (€M)", color='green')
+        ax1.tick_params(axis='y', labelcolor='green')
+
+        # Second y-axis for overall rating
+        ax2 = ax1.twinx()
+        ax2.plot(player_data["FIFA Edition"], player_data["Overall"], marker='s', label="Overall Rating", color='blue')
+        ax2.set_ylabel("Overall Rating", color='blue')
+        ax2.tick_params(axis='y', labelcolor='blue')
+
+        # Title and labels
+        plt.title(f"{selected_player}'s Value and Overall Rating Over FIFA Editions")
+        fig.tight_layout()
+
+        # Show plot
+        st.pyplot(fig)
+
+
         st.markdown("Player Nationality Distribution")
         st.write("Explore which countries contribute the most players in each FIFA edition.")
 
-        # Select number of top nationalities to show
-        top_n = st.slider("Select number of top nationalities to display:", min_value=5, max_value=20, value=10)
-
-        # Get top N nationalities
-        top_nationalities = df["Nationality"].value_counts().head(top_n)
+        # Get top 10 nationalities
+        top_nationalities = df["Nationality"].value_counts().head(10)
 
         # Create plot
         fig, ax = plt.subplots(figsize=(8, 6))      
@@ -152,7 +206,7 @@ elif selected == "02: Viz":
         sns.barplot(x=top_nationalities.values, y=top_nationalities.index, ax=ax, palette="crest")
         ax.set_xlabel("Number of Players")
         ax.set_ylabel("Nationality")
-        ax.set_title(f"{top_n} Player Nationalities in FIFA {dataset_option}")
+        ax.set_title(f"{10} Player Nationalities in FIFA {dataset_option}")
 
         # Show plot
         st.pyplot(fig)
