@@ -137,8 +137,27 @@ elif selected == "02: Viz":
         # Display the plot 
         st.pyplot(fig)
 
+        st.markdown("Player Nationality Distribution")
+        st.write("Explore which countries contribute the most players in each FIFA edition.")
 
-        st.markdown("## 🔥 Distributions of Football Playes")
+        # Select number of top nationalities to show
+        top_n = st.slider("Select number of top nationalities to display:", min_value=5, max_value=20, value=10)
+
+        # Get top N nationalities
+        top_nationalities = df["Nationality"].value_counts().head(top_n)
+
+        # Create plot
+        fig, ax = plt.subplots(figsize=(8, 6))      
+
+        sns.barplot(x=top_nationalities.values, y=top_nationalities.index, ax=ax, palette="crest")
+        ax.set_xlabel("Number of Players")
+        ax.set_ylabel("Nationality")
+        ax.set_title(f"{top_n} Player Nationalities in FIFA {dataset_option}")
+
+        # Show plot
+        st.pyplot(fig)
+
+        st.markdown("## 🔥 Distributions of Football Players")
         st.write("select a category to view Football Players Distibution")
 
         categories = {
@@ -196,7 +215,7 @@ elif selected == "02: Viz":
     # Show Chart
     st.pyplot(fig)
 
-    st.markdown("## 🔥 Distributions of Football Playes")
+    st.markdown("## 🔥 Distributions of Football Players")
     
 
    
